@@ -17,7 +17,7 @@ library.add(faEdit, faPlus, faBars);
 import plausible from "./plugins/plausible";
 
 const plausibleOptions = {
-  domain: "www.kerntopp.shop.de",
+  domain: "www.kerntopp.shop",
   apiHost: "https://tracking.jmartz.gmbh",
   hashMode: false,
   trackLocalhost: false,

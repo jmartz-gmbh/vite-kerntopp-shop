@@ -1,4 +1,4 @@
-# Docker - kerntopp.shop.de
+# Docker - kerntopp.shop
 
 ## Techstack:
 - VueJs
