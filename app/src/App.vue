@@ -23,10 +23,13 @@ export default {
     "footer-general": footer,
   },
   watch: {
-    $route: function(){
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-  }
+    $route: function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+  },
+  mounted() {
+    this.$store.commit("cart-items-load");
+  },
 };
 </script>
 
