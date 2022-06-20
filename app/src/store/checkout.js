@@ -10,7 +10,7 @@ export default {
       city: "",
     },
     shippingMethod: "",
-    shippingAndBillingSame: false,
+    shippingAndBillingSame: true,
     billing: {
       surename: "woman",
       firstname: "",

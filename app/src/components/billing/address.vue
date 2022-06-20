@@ -126,7 +126,7 @@ export default {
   },
   data() {
     return {
-      same: false,
+      same: true,
       billing: {
         surename: "woman",
         firstname: "",

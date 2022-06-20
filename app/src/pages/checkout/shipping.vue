@@ -9,6 +9,8 @@
         <shipping-method></shipping-method>
       </div>
       <div class="col-span-6 md:col-span-3">
+        <pickup-store v-if="shippingMethod == 'clickAndCollect'">
+        </pickup-store>
         <personal-information
           v-if="shippingMethod == 'clickAndCollect'"
         ></personal-information>
@@ -36,6 +38,7 @@ import ShippingMethod from "../../components/shipping/method.vue";
 import ShippingAddress from "../../components/shipping/address.vue";
 import BillingAddress from "../../components/billing/address.vue";
 import PersonalInformation from "../../components/personal/information.vue";
+import PickupStore from "../../components/pickup/store.vue";
 
 export default {
   name: "CheckoutShipping",
@@ -59,6 +62,7 @@ export default {
     "shipping-method": ShippingMethod,
     "billing-address": BillingAddress,
     "personal-information": PersonalInformation,
+    "pickup-store": PickupStore,
   },
   computed: {
     shippingMethod: function () {
