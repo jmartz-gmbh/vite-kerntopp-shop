@@ -35,7 +35,7 @@ library.add(
 import plausible from "./plugins/plausible";
 
 const plausibleOptions = {
-  domain: "www.kerntopp.shop",
+  domain: "shop.kerntopp.shop",
   apiHost: "https://tracking.jmartz.gmbh",
   hashMode: false,
   trackLocalhost: false,
