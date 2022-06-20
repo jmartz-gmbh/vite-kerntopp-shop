@@ -29,6 +29,7 @@ export default {
   },
   mounted() {
     this.$store.commit("cart-items-load");
+    this.$store.commit("auth-token-load");
   },
 };
 </script>

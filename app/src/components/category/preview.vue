@@ -35,7 +35,7 @@ export default {
           return response.json();
         })
         .then((json) => {
-          that.products = json.data.splice(-1 * that.limit);
+          that.products = json.data.reverse().splice(-1 * that.limit);
         });
     },
   },

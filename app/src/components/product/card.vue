@@ -8,9 +8,15 @@
         "
         alt=""
       />
-      <h2>{{ product.attributes.name }}</h2>
+      <h2>{{ product.attributes.name }} - {{ product.attributes.price }} €</h2>
+      <p>{{ product.attributes.desc }}</p>
       <div class="buttons">
-        <button @click="addToCart(product.id, 1)">add to Cart</button>
+        <button
+          @click="addToCart(product.id, 1)"
+          class="float-right bg-blue-400 border border-black px-2 py-2"
+        >
+          add to Cart
+        </button>
       </div>
     </div>
   </div>
