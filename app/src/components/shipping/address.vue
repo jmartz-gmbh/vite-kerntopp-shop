@@ -1,6 +1,6 @@
 <template>
   <div class="vc-shipping-address">
-    <div class="form shipping">
+    <div class="form shipping border-gray-400 border-2">
       <div class="form-group w-full px-2 py-2">
         <label class="mr-2">Anrede</label>
         <select v-model="shipping.surename" class="px-2 py-2 bg-gray-400">
@@ -72,7 +72,7 @@ export default {
   data() {
     return {
       shipping: {
-        surename: "Herr",
+        surename: "woman",
         firstname: "",
         lastname: "",
         street: "",
@@ -81,6 +81,28 @@ export default {
         city: "",
       },
     };
+  },
+  mounted() {
+    this.$store.commit("checkout-load-shipping-address", {
+      that: this,
+    });
+    this.shipping = this.$store.state.checkout.shipping;
+  },
+  watch: {
+    shipping: {
+      handler(value) {
+        this.$store.commit("checkout-update-shipping-address", {
+          that: this,
+          address: value,
+        });
+      },
+      deep: true,
+    },
+  },
+  computed: {
+    shippingMethod: function () {
+      return this.$store.state.checkout.shippingMethod;
+    },
   },
 };
 </script>

@@ -1,8 +1,20 @@
 <template>
   <div class="vc-billing-address">
-    <input type="checkbox" v-model="same" />
-    <div v-if="same" class="same-address-note">beide Gleich</div>
-    <div v-else class="form">
+    <div class="form-group">
+      <label>Gleiche Adresse verwenden</label>
+      <input type="checkbox" v-model="same" />
+    </div>
+    <div
+      v-if="$store.state.checkout.shippingAndBillingSame"
+      class="same-address-note"
+    >
+      <p
+        class="w-full px-2 py-2 border-2 border-gray-400 rounded-lg text-center mt-2"
+      >
+        Versandadress entspricht Rechnungsadresse
+      </p>
+    </div>
+    <div v-else class="form billing border-gray-400 border-2">
       <div class="form-group w-full px-2 py-2">
         <label class="mr-2">Anrede</label>
         <select v-model="billing.surename" class="px-2 py-2 bg-gray-400">
@@ -71,16 +83,28 @@
 <script>
 export default {
   name: "BillingAddress",
+  computed: {
+    shippingAndBillingSame: function () {
+      return this.$store.state.checkout.shippingAndBillingSame;
+    },
+    shippingMethod: function () {
+      return this.$store.state.checkout.shippingMethod;
+    },
+  },
   mounted() {
-    this.same = true;
+    this.$store.commit("checkout-load-billing-address", {
+      that: this,
+    });
+    this.billing = this.$store.state.checkout.billing;
   },
   watch: {
     same: function (value) {
+      this.$store.commit("checkout-same-toggle");
+
       if (value) {
-        this.billing = this.$store.state.checkout.shipping;
-      } else {
+        this.$store.commit("checkout-remove-billing");
         this.billing = {
-          surename: "Herr",
+          surename: "woman",
           firstname: "",
           lastname: "",
           street: "",
@@ -90,12 +114,21 @@ export default {
         };
       }
     },
+    billing: {
+      handler(value) {
+        this.$store.commit("checkout-update-billing-address", {
+          that: this,
+          address: value,
+        });
+      },
+      deep: true,
+    },
   },
   data() {
     return {
       same: false,
       billing: {
-        surename: "",
+        surename: "woman",
         firstname: "",
         lastname: "",
         street: "",

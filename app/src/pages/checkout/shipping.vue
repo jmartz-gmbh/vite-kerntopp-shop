@@ -9,8 +9,15 @@
         <shipping-method></shipping-method>
       </div>
       <div class="col-span-6 md:col-span-3">
-        <shipping-address></shipping-address>
-        <billing-address></billing-address>
+        <personal-information
+          v-if="shippingMethod == 'clickAndCollect'"
+        ></personal-information>
+        <shipping-address
+          v-if="shippingMethod != 'clickAndCollect'"
+        ></shipping-address>
+        <billing-address
+          v-if="shippingMethod != 'clickAndCollect'"
+        ></billing-address>
       </div>
     </div>
     <div class="col-span-6">
@@ -28,16 +35,14 @@
 import ShippingMethod from "../../components/shipping/method.vue";
 import ShippingAddress from "../../components/shipping/address.vue";
 import BillingAddress from "../../components/billing/address.vue";
+import PersonalInformation from "../../components/personal/information.vue";
 
 export default {
   name: "CheckoutShipping",
   data() {
-    return {
-      same: false,
-    };
+    return {};
   },
   mounted() {
-    this.same = true;
     if (
       this.$store.state.auth.token == null ||
       this.$store.state.auth.token == ""
@@ -49,6 +54,12 @@ export default {
     "shipping-address": ShippingAddress,
     "shipping-method": ShippingMethod,
     "billing-address": BillingAddress,
+    "personal-information": PersonalInformation,
+  },
+  computed: {
+    shippingMethod: function () {
+      return this.$store.state.checkout.shippingMethod;
+    },
   },
 };
 </script>

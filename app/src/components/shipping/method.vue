@@ -63,5 +63,16 @@ export default {
       shippingMethod: "clickAndCollect",
     };
   },
+  watch: {
+    shippingMethod: function (value) {
+      this.$store.commit("checkout-change-shipping-method", {
+        that: this,
+        method: value,
+      });
+    },
+  },
+  mounted() {
+    this.$store.commit("checkout-load-shipping-method");
+  },
 };
 </script>
