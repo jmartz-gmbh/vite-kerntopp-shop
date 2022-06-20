@@ -9,7 +9,7 @@ export default {
       country: "",
       city: "",
     },
-    shippingMethod: "clickAndCollect",
+    shippingMethod: "",
     shippingAndBillingSame: false,
     billing: {
       surename: "woman",

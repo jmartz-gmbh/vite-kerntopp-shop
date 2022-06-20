@@ -49,6 +49,10 @@ export default {
     ) {
       this.$router.push("/checkout/account");
     }
+    this.$store.commit("checkout-change-shipping-method", {
+      that: this,
+      method: "clickAndCollect",
+    });
   },
   components: {
     "shipping-address": ShippingAddress,

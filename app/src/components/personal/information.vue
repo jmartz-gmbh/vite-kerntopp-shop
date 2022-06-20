@@ -10,7 +10,7 @@
         </select>
       </div>
       <div class="form-group w-full px-2 py-2">
-        <label class="mr-2">Firstname</label>
+        <label class="mr-2">Vorname</label>
         <input
           type="text"
           placeholder="Jonathan"
@@ -19,11 +19,20 @@
         />
       </div>
       <div class="form-group w-full px-2 py-2">
-        <label>Lastname</label>
+        <label>Nachname</label>
         <input
           type="text"
           placeholder="Martz"
           v-model="form.lastname"
+          class="px-2 py-2 bg-gray-400"
+        />
+      </div>
+      <div class="form-group w-full px-2 py-2">
+        <label class="mr-2">Telefon</label>
+        <input
+          type="text"
+          placeholder="Jonathan"
+          v-model="form.phone"
           class="px-2 py-2 bg-gray-400"
         />
       </div>
@@ -40,6 +49,7 @@ export default {
         surename: "",
         firstname: "",
         lastname: "",
+        phone: "",
       },
     };
   },
