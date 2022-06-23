@@ -9,6 +9,8 @@
         <shipping-method></shipping-method>
       </div>
       <div class="col-span-6 md:col-span-3">
+        <user-saved-address v-if="shippingMethod != 'clickAndCollect'">
+        </user-saved-address>
         <pickup-store v-if="shippingMethod == 'clickAndCollect'">
         </pickup-store>
         <personal-information
@@ -39,13 +41,17 @@ import ShippingAddress from "../../components/shipping/address.vue";
 import BillingAddress from "../../components/billing/address.vue";
 import PersonalInformation from "../../components/personal/information.vue";
 import PickupStore from "../../components/pickup/store.vue";
+import UserSavedAddress from "../../components/user/saved/address.vue";
 
 export default {
   name: "CheckoutShipping",
   data() {
-    return {};
+    return {
+      valid: false,
+    };
   },
   mounted() {
+    const that = this;
     if (
       this.$store.state.auth.token == null ||
       this.$store.state.auth.token == ""
@@ -56,6 +62,9 @@ export default {
       that: this,
       method: "clickAndCollect",
     });
+    setTimeout(function () {
+      that.isValid();
+    }, 5000);
   },
   components: {
     "shipping-address": ShippingAddress,
@@ -63,10 +72,33 @@ export default {
     "billing-address": BillingAddress,
     "personal-information": PersonalInformation,
     "pickup-store": PickupStore,
+    "user-saved-address": UserSavedAddress,
   },
   computed: {
     shippingMethod: function () {
       return this.$store.state.checkout.shippingMethod;
+    },
+  },
+  methods: {
+    isValid: function () {
+      if (this.$store.state.checkout.shippingMethod == "clickAndCollect") {
+        let info = this.$store.state.checkout.personal_info;
+        if (info.surename == "") {
+          return false;
+        }
+        if (info.firstname == "") {
+          return false;
+        }
+        if (info.lastname == "") {
+          return false;
+        }
+        if (info.phone == "") {
+          return false;
+        }
+        return true;
+      }
+
+      return false;
     },
   },
 };

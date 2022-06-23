@@ -1,6 +1,7 @@
 <template>
   <div class="vc-billing-address">
-    <div class="form-group">
+    <h2 class="text-xl font-bold mx-2">Rechnungsadresse</h2>
+    <div class="form-group mx-2">
       <label>Gleiche Adresse verwenden</label>
       <input type="checkbox" v-model="same" />
     </div>
