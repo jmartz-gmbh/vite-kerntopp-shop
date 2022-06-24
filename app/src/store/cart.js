@@ -14,6 +14,11 @@ export default {
         state.qty += state.items[i].qty;
       }
     },
+    "cart-destroy": function (state, { that }) {
+      state.items = [];
+      state.qty = 0;
+      that.$store.commit("cart-items-save");
+    },
     "cart-items-save": function (state) {
       localStorage.setItem(
         "cart",

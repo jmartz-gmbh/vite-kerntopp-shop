@@ -60,7 +60,7 @@
         />
       </div>
       <div class="form-group w-full px-2 py-2">
-        <label>City</label>
+        <label>Stadt</label>
         <input
           type="text"
           v-model="billing.city"

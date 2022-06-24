@@ -9,9 +9,12 @@
       <ul>
         <li>Test</li>
       </ul>
-      <div class="mini-cart">
+      <div class="mini-cart flex space-x-3">
         <router-link to="/cart"> <fa icon="cart-shopping" /></router-link>
-        {{ $store.state.cart.qty }}
+        <span> {{ $store.state.cart.qty }}</span>
+        <button v-if="$store.state.auth.token != ''"  @click="$store.commit('user-logout', { that: this })">
+          <fa icon="right-from-bracket" />
+        </button>
       </div>
     </nav>
   </div>

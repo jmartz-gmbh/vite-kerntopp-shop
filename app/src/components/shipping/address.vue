@@ -54,7 +54,7 @@
         />
       </div>
       <div class="form-group mx-2">
-        <label class="block mb-2 text-sm">City</label>
+        <label class="block mb-2 text-sm">Stadt</label>
         <input
           type="text"
           v-model="shipping.city"

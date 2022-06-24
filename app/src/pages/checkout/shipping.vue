@@ -25,10 +25,13 @@
       </div>
     </div>
     <div class="col-span-6">
-      <div class="buttons flex justify-between">
+      <div class="buttons flex justify-between mt-2">
         <button class="bg-blue-400 px-2 py-2 boder border-black">back</button>
-        <button class="bg-blue-400 px-2 py-2 boder border-black">
-          <router-link to="/checkout/payment">next</router-link>
+        <button
+          class="bg-blue-400 px-2 py-2 boder border-black"
+          @click="nextStep()"
+        >
+          Nächster Schritt
         </button>
       </div>
     </div>
@@ -80,6 +83,12 @@ export default {
     },
   },
   methods: {
+    nextStep: function () {
+      console.log(this.valid);
+      if (this.valid) {
+        this.$router.push("/checkout/payment");
+      }
+    },
     isValid: function () {
       if (this.$store.state.checkout.shippingMethod == "clickAndCollect") {
         let info = this.$store.state.checkout.personal_info;

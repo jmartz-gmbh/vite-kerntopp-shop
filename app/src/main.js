@@ -14,6 +14,7 @@ import {
   faCircle,
   faCircleDot,
   faCartShopping,
+  faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faDhl } from "@fortawesome/free-brands-svg-icons";
@@ -29,6 +30,7 @@ library.add(
   faDhl,
   faBox,
   faCircle,
+  faRightFromBracket,
   faCircleDot
 );
 
