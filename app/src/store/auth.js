@@ -13,6 +13,7 @@ export default {
       that.$store.commit("cart-destroy", {
         that: that,
       });
+      that.$router.push('/');
     },
     "auth-token-save": function (state) {
       localStorage.setItem("token", state.token);

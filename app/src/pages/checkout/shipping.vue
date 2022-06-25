@@ -65,9 +65,6 @@ export default {
       that: this,
       method: "clickAndCollect",
     });
-    setTimeout(function () {
-      that.isValid();
-    }, 5000);
   },
   components: {
     "shipping-address": ShippingAddress,
@@ -84,13 +81,14 @@ export default {
   },
   methods: {
     nextStep: function () {
+      this.valid = this.isValid();
       console.log(this.valid);
       if (this.valid) {
         this.$router.push("/checkout/payment");
       }
     },
     isValid: function () {
-      if (this.$store.state.checkout.shippingMethod == "clickAndCollect") {
+      if (this.shippingMethod == "clickAndCollect") {
         let info = this.$store.state.checkout.personal_info;
         if (info.surename == "") {
           return false;
@@ -103,6 +101,59 @@ export default {
         }
         if (info.phone == "") {
           return false;
+        }
+        return true;
+      } else if (
+        this.shippingMethod == "dhl" ||
+        this.shippingMethod == "dhl-express"
+      ) {
+        let shipping = this.$store.state.checkout.shipping;
+        if (shipping.surename == "") {
+          return false;
+        }
+        if (shipping.firstname == "") {
+          return false;
+        }
+        if (shipping.lastname == "") {
+          return false;
+        }
+        if (shipping.street == "") {
+          return false;
+        }
+        if (shipping.city == "") {
+          return false;
+        }
+        if (shipping.postcode == "") {
+          return false;
+        }
+        if (shipping.country == "") {
+          return false;
+        }
+
+        if (!this.$store.state.checkout.shippingAndBillingSame) {
+          let billing = this.$store.state.checkout.billing;
+          if (billing.surename == "") {
+            return false;
+          }
+          if (billing.firstname == "") {
+            return false;
+          }
+          if (billing.lastname == "") {
+            return false;
+          }
+          if (billing.street == "") {
+            return false;
+          }
+          if (billing.city == "") {
+            return false;
+          }
+          if (billing.postcode == "") {
+            return false;
+          }
+          if (billing.country == "") {
+            return false;
+          }
+          return true;
         }
         return true;
       }
