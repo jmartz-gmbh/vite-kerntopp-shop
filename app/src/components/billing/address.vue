@@ -106,7 +106,7 @@ export default {
         this.$store.commit("checkout-remove-billing");
         this.billing = {
           surename: "woman",
-          firstname: "",
+          firstname: "k",
           lastname: "",
           street: "",
           postcode: "",
@@ -130,7 +130,7 @@ export default {
       same: true,
       billing: {
         surename: "woman",
-        firstname: "",
+        firstname: "h",
         lastname: "",
         street: "",
         postcode: "",

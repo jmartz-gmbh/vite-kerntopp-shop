@@ -14,10 +14,11 @@ import {
   faCircle,
   faCircleDot,
   faCartShopping,
+  faMoneyBill,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { faDhl } from "@fortawesome/free-brands-svg-icons";
+import { faDhl,faPaypal } from "@fortawesome/free-brands-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -31,7 +32,9 @@ library.add(
   faBox,
   faCircle,
   faRightFromBracket,
-  faCircleDot
+  faCircleDot,
+  faMoneyBill,
+  faPaypal
 );
 
 import plausible from "./plugins/plausible";

@@ -16,7 +16,12 @@
             icon="circle-dot"
             v-else
             class="fa-2x"
-            @click="shippingMethod = 'clickAndCollect'"
+            @click="
+              $store.commit('checkout-change-shipping-method', {
+                that: this,
+                method: 'clickAndCollect',
+              })
+            "
           />
         </div>
       </div>
@@ -31,7 +36,12 @@
             icon="circle-dot"
             v-else
             class="fa-2x"
-            @click="shippingMethod = 'dhl'"
+            @click="
+              $store.commit('checkout-change-shipping-method', {
+                that: this,
+                method: 'dhl',
+              })
+            "
           />
         </div>
       </div>
@@ -50,7 +60,12 @@
             icon="circle-dot"
             v-else
             class="fa-2x"
-            @click="shippingMethod = 'dhlExpress'"
+            @click="
+              $store.commit('checkout-change-shipping-method', {
+                that: this,
+                method: 'dhlExpress',
+              })
+            "
           />
         </div>
       </div>
@@ -61,17 +76,16 @@
 <script>
 export default {
   name: "ShippingMethod",
-  data() {
-    return {
-      shippingMethod: "clickAndCollect",
-    };
-  },
-  watch: {
-    shippingMethod: function (value) {
-      this.$store.commit("checkout-change-shipping-method", {
-        that: this,
-        method: value,
-      });
+  computed: {
+    shippingMethod: function () {
+      if (this.$store.state.checkout.shippingMethod == null) {
+        this.$store.commit("checkout-change-shipping-method", {
+          that: this,
+          method: "clickAndCollect",
+        });
+        return "clickAndCollect";
+      }
+      return this.$store.state.checkout.shippingMethod;
     },
   },
   mounted() {

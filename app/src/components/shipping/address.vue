@@ -80,24 +80,9 @@
 <script>
 export default {
   name: "ShippingAddress",
-  data() {
-    return {};
-  },
   mounted() {
-    this.$store.commit("checkout-load-shipping-address", {
-      that: this,
-    });
-  },
-  watch: {
-    shipping: {
-      handler(value) {
-        this.$store.commit("checkout-update-shipping-address", {
-          that: this,
-          address: value,
-        });
-      },
-      deep: true,
-    },
+    this.$store.commit("checkout-load-shipping-address");
+    this.form = this.$store.state.checkout.shipping;
   },
   computed: {
     shipping: function () {

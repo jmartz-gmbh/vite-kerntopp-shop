@@ -61,10 +61,7 @@ export default {
     ) {
       this.$router.push("/checkout/account");
     }
-    this.$store.commit("checkout-change-shipping-method", {
-      that: this,
-      method: "clickAndCollect",
-    });
+    this.$store.commit("checkout-load-shipping-method");
   },
   components: {
     "shipping-address": ShippingAddress,
@@ -88,6 +85,9 @@ export default {
       }
     },
     isValid: function () {
+      this.$store.commit("checkout-save-shipping-address");
+      this.$store.commit("checkout-save-billing-address");
+
       if (this.shippingMethod == "clickAndCollect") {
         let info = this.$store.state.checkout.personal_info;
         if (info.surename == "") {
