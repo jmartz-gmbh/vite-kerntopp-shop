@@ -36,9 +36,20 @@ export default {
       lastname: "",
       phone: "",
     },
+    paymentMethod: "vorkasse",
   }),
   mutations: {
     ...{
+      "checkout-save-payment-method": function (state) {
+        localStorage.setItem("payment_method", state.paymentMethod);
+      },
+      "checkout-load-payment-method": function (state) {
+        state.paymentMethod = localStorage.getItem("payment_method");
+      },
+      "checkout-update-payment-method": function (state, { that, selected }) {
+        state.paymentMethod = selected;
+        that.$store.commit("checkout-save-payment-method");
+      },
       "checkout-same-toggle": function (state) {
         state.shippingAndBillingSame = !state.shippingAndBillingSame;
         if (!state.shipping) {

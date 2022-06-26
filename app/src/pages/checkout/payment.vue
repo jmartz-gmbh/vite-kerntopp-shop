@@ -8,18 +8,27 @@
       </div>
       <div class="card col-span-6 md:col-span-2 text-center">
         <fa :icon="payment.icon" class="fa-3x block mx-auto mb-3" />
-        <fa icon="circle" v-if="selected == payment.selector" class="fa-2x" />
+        <fa
+          icon="circle"
+          v-if="paymentMethod == payment.selector"
+          class="fa-2x"
+        />
         <fa
           icon="circle-dot"
           v-else
           class="fa-2x"
-          @click="selected = payment.selector"
+          @click="
+            $store.commit('checkout-update-payment-method', {
+              that: this,
+              selected: payment.selector,
+            })
+          "
         />
       </div>
     </div>
     <div class="buttons flex justify-between">
       <button @click="$router.go(-1)">back</button>
-      <button @click="$router.push('/checkout/order')">Nächster Schritt</button>
+      <button @click="nextStep()">Nächster Schritt</button>
     </div>
   </div>
 </template>
@@ -45,6 +54,28 @@ export default {
         },
       ],
     };
+  },
+  mounted() {
+    this.$store.commit("checkout-load-payment-method");
+  },
+  methods: {
+    isValid: function () {
+      if (this.paymentMethod) {
+        return true;
+      }
+      return false;
+    },
+    nextStep: function () {
+      this.valid = this.isValid();
+      if (this.valid) {
+        this.$router.push("/checkout/order");
+      }
+    },
+  },
+  computed: {
+    paymentMethod: function () {
+      return this.$store.state.checkout.paymentMethod;
+    },
   },
 };
 </script>
