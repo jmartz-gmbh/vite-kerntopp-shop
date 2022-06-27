@@ -53,7 +53,11 @@
           class="fa-2x"
         />
         <h3>Paypal</h3>
-        <div id="paypal-button-container"></div>
+        <div v-if="!paypal" id="paypal-button-container"></div>
+        <div v-else class="payment-success">
+          Payment Successfull
+          {{ paypal }}
+        </div>
       </div>
     </div>
 
@@ -70,66 +74,60 @@ export default {
   data() {
     return {
       selected: "vorkasse",
-      payments: [
-        {
-          name: "Vorkasse",
-          icon: ["fa", "money-bill"],
-          selector: "vorkasse",
-          desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam, distinctio! Sequi tempore eius voluptates accusantium culpa tenetur pariatur necessitatibus animi exercitationem saepe, atque laudantium, quasi ad in dolore reiciendis officia.",
-        },
-        {
-          name: "Paypal",
-          icon: ["fab", "paypal"],
-          selector: "paypal",
-          desc: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Magnam, distinctio! Sequi tempore eius voluptates accusantium culpa tenetur pariatur necessitatibus animi exercitationem saepe, atque laudantium, quasi ad in dolore reiciendis officia.",
-        },
-      ],
+      paypal: false,
     };
   },
   mounted() {
     this.$store.commit("checkout-load-payment-method");
-    this.paypalButtons();
+    if (!this.paypal) {
+      this.paypalButtons();
+    }
   },
   methods: {
     paypalButtons: function () {
       var my_awesome_script = document.createElement("script");
       my_awesome_script.setAttribute(
         "src",
-        "https://www.paypal.com/sdk/js?client-id=AVFKm7WX51F145XALYATQFbCucq4MhQQFuOPOuwL8MRRg_xFaosAvp05kfSHvFLQbBQ000l-c_aPit2S&components=buttons"
+        "https://www.paypal.com/sdk/js?client-id=AVFKm7WX51F145XALYATQFbCucq4MhQQFuOPOuwL8MRRg_xFaosAvp05kfSHvFLQbBQ000l-c_aPit2S&components=buttons&currency=EUR"
       );
 
       document.head.appendChild(my_awesome_script);
+      const that = this;
       setTimeout(function () {
         paypal
           .Buttons({
             onApprove: function (data, actions) {
               return actions.order.capture().then(function (details) {
-                console.log("finished", details);
+                that.paypal = details;
+                console.log(details);
               });
             },
             onCancel: function (data) {
-              console.log("cancel", data);
+              that.cancled = true;
             },
             onError: function (error) {
-              console.log("onError", error);
+              that.error = true;
             },
             createOrder: function (data, actions) {
               return actions.order.create({
                 purchase_units: [
                   {
                     amount: {
-                      value: "0.01",
+                      value: "1",
                     },
                   },
                 ],
+                application_context: {
+                  shipping_preference: "NO_SHIPPING",
+                },
               });
             },
           })
           .render("#paypal-button-container");
-      }, 1000);
+      }, 2000);
     },
     isValid: function () {
-      if (this.paymentMethod) {
+      if (this.paymentMethod == 'vorkasse' || this.paymentMethod == 'paypal' && this.paypal.status == 'COMPLETED') {
         return true;
       }
       return false;
