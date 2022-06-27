@@ -127,7 +127,7 @@ export default {
       }, 2000);
     },
     isValid: function () {
-      if (this.paymentMethod == 'vorkasse' || this.paymentMethod == 'paypal' && this.paypal.status == 'COMPLETED') {
+      if (this.paymentMethod == 'vorkasse' || (this.paymentMethod == 'paypal' && this.paypal.status == 'COMPLETED')) {
         return true;
       }
       return false;
