@@ -1,37 +1,66 @@
 <template>
   <div class="vp-checkout-payment">
     <h2 class="text-xl font-bold">Payment</h2>
-    <div v-for="(payment, index) in payments" class="grid grid-cols-6 mt-5">
-      <div class="col-span-6 md:col-span-4">
-        <h2 class="font-bold text-lg">{{ payment.name }}</h2>
-        <p>{{ payment.desc }}</p>
-      </div>
-      <div class="card col-span-6 md:col-span-2 text-center">
-        <fa :icon="payment.icon" class="fa-3x block mx-auto mb-3" />
+    <div class="grid grid-cols-6">
+      <div class="col-span-6 md:col-span-3 text-center">
         <fa
-          icon="circle"
-          v-if="paymentMethod == payment.selector"
+          v-if="$store.state.checkout.paymentMethod == 'vorkasse'"
+          icon="circle-dot"
           class="fa-2x"
         />
         <fa
-          icon="circle-dot"
           v-else
-          class="fa-2x"
+          icon="circle"
           @click="
             $store.commit('checkout-update-payment-method', {
               that: this,
-              selected: payment.selector,
+              selected: 'vorkasse',
             })
           "
+          class="fa-2x"
         />
+
+        <fa icon="money-bill" class="fa-4x mx-auto block" />
+        <h3>Vorkasse</h3>
+        <p>
+          Einfach bequem Überweisen <br />
+          Es kann einige Tage dauern bis die Überweisung bei uns eingegangen ist
+          und bearbeitet wurde. <br />
+          Versand erfolgt nach eingang der Zahlung.
+        </p>
+        <p class="mt-5">
+          Empfänger: Jmartz GmbH <br />
+          IBAN: <span class="font-bold">DE98 3845 0000 1000 1820 95</span>
+          <br />
+          Verwendungszweck: Bestellung XYZ
+        </p>
+      </div>
+      <div class="col-span-6 md:col-span-3">
+        <fa
+          v-if="$store.state.checkout.paymentMethod == 'paypal'"
+          icon="circle-dot"
+          class="fa-2x"
+        />
+        <fa
+          v-else
+          icon="circle"
+          @click="
+            $store.commit('checkout-update-payment-method', {
+              that: this,
+              selected: 'paypal',
+            })
+          "
+          class="fa-2x"
+        />
+        <h3>Paypal</h3>
+        <div id="paypal-button-container"></div>
       </div>
     </div>
+
     <div class="buttons flex justify-between">
       <button @click="$router.go(-1)">back</button>
       <button @click="nextStep()">Nächster Schritt</button>
     </div>
-
-    <div id="paypal-button-container"></div>
   </div>
 </template>
 
