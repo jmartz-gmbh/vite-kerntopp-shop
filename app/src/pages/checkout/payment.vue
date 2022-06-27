@@ -30,6 +30,8 @@
       <button @click="$router.go(-1)">back</button>
       <button @click="nextStep()">Nächster Schritt</button>
     </div>
+
+    <div id="paypal-button-container"></div>
   </div>
 </template>
 
@@ -57,8 +59,46 @@ export default {
   },
   mounted() {
     this.$store.commit("checkout-load-payment-method");
+    this.paypalButtons();
   },
   methods: {
+    paypalButtons: function () {
+      var my_awesome_script = document.createElement("script");
+      my_awesome_script.setAttribute(
+        "src",
+        "https://www.paypal.com/sdk/js?client-id=AVFKm7WX51F145XALYATQFbCucq4MhQQFuOPOuwL8MRRg_xFaosAvp05kfSHvFLQbBQ000l-c_aPit2S&components=buttons"
+      );
+
+      document.head.appendChild(my_awesome_script);
+      setTimeout(function () {
+        paypal
+          .Buttons({
+            onApprove: function (data, actions) {
+              return actions.order.capture().then(function (details) {
+                console.log("finished", details);
+              });
+            },
+            onCancel: function (data) {
+              console.log("cancel", data);
+            },
+            onError: function (error) {
+              console.log("onError", error);
+            },
+            createOrder: function (data, actions) {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: "0.01",
+                    },
+                  },
+                ],
+              });
+            },
+          })
+          .render("#paypal-button-container");
+      }, 1000);
+    },
     isValid: function () {
       if (this.paymentMethod) {
         return true;
