@@ -16,6 +16,8 @@ import {
   faCartShopping,
   faMoneyBill,
   faRightFromBracket,
+  faInfo,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faDhl,faPaypal } from "@fortawesome/free-brands-svg-icons";
@@ -25,6 +27,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(
   faEdit,
   faPlus,
+  faInfo,
+  faTimes,
   faBars,
   faCartShopping,
   faTrash,

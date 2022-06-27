@@ -4,6 +4,8 @@
       <header-general></header-general>
     </header>
     <main class="mx-auto max-w-5xl bg-white px-2 py-2 mt-2 min-h-screen">
+      <breadcrumb></breadcrumb>
+      <messages></messages>
       <router-view></router-view>
     </main>
     <footer class="mx-auto max-w-5xl px-2 py-2 mt-2">
@@ -14,6 +16,8 @@
 <script>
 import header from "./components/header.vue";
 import footer from "./components/footer.vue";
+import breadcrumb from "./components/breadcrumb.vue";
+import messages from "./components/messages.vue";
 
 import "./tailwind.css";
 export default {
@@ -21,6 +25,8 @@ export default {
   components: {
     "header-general": header,
     "footer-general": footer,
+    breadcrumb,
+    messages,
   },
   watch: {
     $route: function () {
@@ -30,13 +36,17 @@ export default {
   mounted() {
     this.$store.commit("cart-items-load");
     this.$store.commit("auth-token-load");
+    this.$store.commit("messages-add", {
+        status: "warning",
+        message: "Dies ist keine offizielle Webseite der Kerntopp Autoteile GmbH",
+      });
   },
 };
 </script>
 
 <style lang="less">
 .app {
-  background: linear-gradient(-45deg, #ee7752, #e73c7e);
+  background: linear-gradient(-45deg, red, orange);
   background-size: auto;
 }
 </style>
