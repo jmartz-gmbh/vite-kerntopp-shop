@@ -2,20 +2,20 @@
   <div class="vc-header flex justify-between mt-2">
     <span
       ><router-link to="/" class="font-bold text-white text-xl ml-2"
-        >www.kerntopp.shop</router-link
+        >kerntopp.shop</router-link
       ></span
     >
-    <nav class="mt-2">
-      <ul>
-        <li>Test</li>
+    <nav class="mt-2 flex">
+      <ul class="hidden md:flex space-x-3 text-white mr-2">
+        <li>
+          <router-link to="/">Home</router-link>
+        </li>
+        <li><router-link to="/impressum">Impressum</router-link></li>
       </ul>
-      <div class="mini-cart flex space-x-3">
-        <router-link to="/cart"> <fa icon="cart-shopping" /></router-link>
-        <span> {{ $store.state.cart.qty }}</span>
-        <button v-if="$store.state.auth.token != ''"  @click="$store.commit('user-logout', { that: this })">
-          <fa icon="right-from-bracket" />
-        </button>
-      </div>
+      <router-link to="/cart" class="ml-2"> <fa icon="cart-shopping" /></router-link>
+      <button>
+        <fa icon="bars" class="ml-2 block md:hidden" @click="$store.commit('nav-toggle')" />
+      </button>
     </nav>
   </div>
 </template>

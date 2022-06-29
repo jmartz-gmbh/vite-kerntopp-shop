@@ -3,6 +3,7 @@
     <header class="mx-auto max-w-5xl px-2 py-2">
       <header-general></header-general>
     </header>
+    <nav-content class="mx-auto max-w-5xl my-3"></nav-content>
     <main class="mx-auto max-w-5xl bg-white px-2 py-2 mt-2 min-h-screen">
       <breadcrumb></breadcrumb>
       <messages></messages>
@@ -18,6 +19,7 @@ import header from "./components/header.vue";
 import footer from "./components/footer.vue";
 import breadcrumb from "./components/breadcrumb.vue";
 import messages from "./components/messages.vue";
+import navContent from "./components/nav/content.vue";
 
 import "./tailwind.css";
 export default {
@@ -27,6 +29,7 @@ export default {
     "footer-general": footer,
     breadcrumb,
     messages,
+    navContent,
   },
   watch: {
     $route: function () {
@@ -38,7 +41,7 @@ export default {
     this.$store.commit("auth-token-load");
     this.$store.commit("messages-add", {
         status: "warning",
-        message: "Dies ist keine offizielle Webseite der Kerntopp Autoteile GmbH",
+        message: "Dies ist keine offizielle Webseite der Kerntopp Autoteile GmbH !!!",
       });
   },
 };
