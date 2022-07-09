@@ -1,46 +1,34 @@
-export default {
-  "checkout-remove-shipping": function (state) {
-    state.shipping = {
-      surename: "woman",
-      firstname: "a",
-      lastname: "",
-      street: "",
-      postcode: "",
-      country: "",
-      city: "",
+import { defineStore } from "pinia";
+
+export const useCheckoutShippingStore = defineStore("shipping", {
+  state() {
+    return {
+      address: {
+        surename: "",
+        firstname: "",
+        lastname: "",
+        street: "",
+        postcode: "",
+        city: "",
+        country: "",
+      },
     };
-    localStorage.setItem(
-      "shipping",
-      JSON.stringify({
-        surename: "woman",
-        firstname: "a",
-        lastname: "",
-        street: "",
-        postcode: "",
-        country: "",
-        city: "",
-      })
-    );
   },
-  "checkout-save-shipping-address": function (state) {
-    localStorage.setItem("shipping", JSON.stringify(state.shipping));
+  actions: {
+    update: function (value) {
+      this.address = value;
+      this.save();
+    },
+    save: function () {
+      localStorage.setItem("shipping", JSON.stringify(this.address));
+    },
+    reload: function () {
+      let json = localStorage.getItem("shipping");
+      if (json == null || json == "undefined") {
+        this.$reset();
+      } else {
+        this.address = JSON.parse(json);
+      }
+    },
   },
-  "checkout-update-shipping-address": function (state, { that, address }) {
-    state.shipping = address;
-    that.$store.commit("checkout-save-shipping-address");
-  },
-  "checkout-load-shipping-address": function (state) {
-    state.shipping = JSON.parse(localStorage.getItem("shipping"));
-    if (state.shipping == null) {
-      state.shipping = {
-        surename: "woman",
-        firstname: "a",
-        lastname: "",
-        street: "",
-        postcode: "",
-        country: "",
-        city: "",
-      };
-    }
-  },
-};
+});

@@ -10,19 +10,15 @@
     <div class="tw-table block border border-black">
       <div class="row grid grid-cols-12 bg-gray-300 font-bold px-2 py-2">
         <div class="col col-span-12 md:col-span-2">Id</div>
-        <div class="col col-span-12 md:col-span-2">Name</div>
         <div class="col col-span-12 md:col-span-2">Menge</div>
-        <div class="col col-span-12 md:col-span-2">Preis</div>
         <div class="col col-span-12 md:col-span-2">Aktion</div>
       </div>
       <div
-        v-for="(item, index) in $store.state.cart.items"
+        v-for="(item, index) in items"
         class="row grid grid-cols-12 font-bold px-2 py-2"
       >
         <div class="col col-span-12 md:col-span-2">{{ item.id }}</div>
-        <div class="col col-span-12 md:col-span-2">{{ name[item.id] }}</div>
         <div class="col col-span-12 md:col-span-2">{{ item.qty }}</div>
-        <div class="col col-span-12 md:col-span-2">{{ price[item.id] }}</div>
         <div class="col col-span-12 md:col-span-2">
           <button @click="remove(item.id)">
             <fa icon="trash" />
@@ -38,52 +34,31 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "Cart",
-  data() {
-    return {
-      name: [],
-      price: [],
-    };
-  },
-  computed: {
-    total: function () {
-      let tmp = 0;
-      for (let i = 0; i < this.$store.state.cart.items.length; i++) {
-        tmp +=
-          this.$store.state.cart.items[i].qty *
-          this.price[this.$store.state.cart.items[i].id];
-      }
-      return tmp;
-    },
-  },
-  mounted() {
-    this.loadPrices();
-    if (this.$store.state.cart.items.length <= 0) {
-      this.$router.push("/");
+<script setup>
+import { useCartStore } from "@/store/cart.js";
+import { storeToRefs } from "pinia";
+import { computed, onMounted } from "vue";
+
+let store = useCartStore();
+const { items } = storeToRefs(store);
+
+let total = computed(function () {
+  let tmp = 0;
+  for (let i = 0; i < items.length; i++) {
+    tmp += 10 * items[i].qty;
+  }
+  return tmp;
+});
+
+let remove = function (id) {
+  this.items.map(function (item) {
+    if (item.id != id) {
+      return item;
     }
-  },
-  methods: {
-    loadPrices: function () {
-      const that = this;
-      fetch("https://catalog.kerntopp.shop/api/products", {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          for (let i = 0; i < json.data.length; i++) {
-            that.price[json.data[i].id] = json.data[i].attributes.price;
-            that.name[json.data[i].id] = json.data[i].attributes.name;
-          }
-        });
-    },
-    remove: function (id) {
-      this.$store.commit("cart-item-remove", {
-        that: this,
-        id: id,
-      });
-    },
-  },
+  });
 };
+
+onMounted(function () {
+  store.reload();
+});
 </script>

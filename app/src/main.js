@@ -1,8 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import store from "./store";
 import routes from "./routes";
-
+import { createPinia } from "pinia";
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 import {
@@ -18,9 +17,10 @@ import {
   faRightFromBracket,
   faInfo,
   faTimes,
+  faArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { faDhl,faPaypal } from "@fortawesome/free-brands-svg-icons";
+import { faDhl, faPaypal } from "@fortawesome/free-brands-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -34,6 +34,7 @@ library.add(
   faTrash,
   faDhl,
   faBox,
+  faArrowRightFromBracket,
   faCircle,
   faRightFromBracket,
   faCircleDot,
@@ -54,6 +55,6 @@ const app = createApp(App);
 
 app.use(plausible, plausibleOptions);
 app.component("fa", FontAwesomeIcon);
+app.use(createPinia());
 app.use(routes);
-app.use(store);
 app.mount("#app");

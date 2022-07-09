@@ -14,37 +14,38 @@
     </footer>
   </div>
 </template>
-<script>
-import header from "./components/header.vue";
-import footer from "./components/footer.vue";
+<script setup>
+import { onMounted, watch } from "vue";
+import headerGeneral from "./components/header.vue";
+import footerGeneral from "./components/footer.vue";
 import breadcrumb from "./components/breadcrumb.vue";
 import messages from "./components/messages.vue";
 import navContent from "./components/nav/content.vue";
-
 import "./tailwind.css";
-export default {
-  name: "App",
-  components: {
-    "header-general": header,
-    "footer-general": footer,
-    breadcrumb,
-    messages,
-    navContent,
-  },
-  watch: {
-    $route: function () {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    },
-  },
-  mounted() {
-    this.$store.commit("cart-items-load");
-    this.$store.commit("auth-token-load");
-    this.$store.commit("messages-add", {
-        status: "warning",
-        message: "Dies ist keine offizielle Webseite der Kerntopp Autoteile GmbH !!!",
-      });
-  },
-};
+import { useRoute, useRouter } from "vue-router";
+import { useAuthStore } from "@/store/auth.js";
+import { useMessagesStore } from "./store/messages";
+
+let router = useRouter();
+let route = useRoute();
+let authStore = useAuthStore();
+let messageStore = useMessagesStore();
+
+watch(
+  () => route,
+  () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    messageStore.$reset();
+  }
+);
+onMounted(function () {
+  messageStore.add({
+    status: "warning",
+    message:
+      "Dies ist keine offizielle Webseite der Kerntopp Autoteile GmbH !!!",
+  });
+  authStore.refresh();
+});
 </script>
 
 <style lang="less">

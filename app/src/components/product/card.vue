@@ -22,45 +22,45 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "ProductCard",
-  data() {
-    return {
-      product: {},
-    };
+<script setup>
+import { storeToRefs } from "pinia";
+import { onMounted, ref } from "vue";
+import { useCartStore } from "../../store/cart";
+
+let props = defineProps({
+  identifier: {
+    required: true,
+    Typ: Number,
   },
-  mounted() {
-    this.load();
-  },
-  methods: {
-    addToCart: function (id, qty) {
-      this.$store.commit("product-add-to-cart", {
-        that: this,
-        id: id,
-        qty: qty,
-      });
-    },
-    load: function () {
-      const that = this;
-      fetch(
-        "https://catalog.kerntopp.shop/api/products/" +
-          this.identifier +
-          "?populate=media"
-      )
-        .then((response) => {
-          return response.json();
-        })
-        .then((json) => {
-          that.product = json.data;
-        });
-    },
-  },
-  props: {
-    identifier: {
-      required: true,
-      typ: Number,
-    },
-  },
+});
+
+let store = useCartStore();
+const { items } = storeToRefs(store);
+
+let product = ref({});
+
+let addToCart = function (id, qty) {
+  store.add({
+    id: id,
+    qty: qty,
+  });
 };
+
+let load = function (id, qty) {
+  fetch(
+    "https://catalog.kerntopp.shop/api/products/" +
+      props.identifier +
+      "?populate=media"
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      product.value = json.data;
+    });
+};
+
+onMounted(function () {
+  load();
+});
 </script>

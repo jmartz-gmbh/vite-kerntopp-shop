@@ -6,7 +6,7 @@
         <label for="countries" class="block mb-2 text-sm">Anrede</label>
         <select
           id="countries"
-          v-model="shipping.surename"
+          v-model="address.surename"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
           <option value="woman">Frau</option>
@@ -17,7 +17,7 @@
         <label class="block mb-2 text-sm">Vorname</label>
         <input
           type="text"
-          v-model="shipping.firstname"
+          v-model="address.firstname"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Jonathan"
           required
@@ -27,7 +27,7 @@
         <label class="block mb-2 text-sm">Nachname</label>
         <input
           type="text"
-          v-model="shipping.lastname"
+          v-model="address.lastname"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Martz"
           required
@@ -37,7 +37,7 @@
         <label class="block mb-2 text-sm">Straße</label>
         <input
           type="text"
-          v-model="shipping.street"
+          v-model="address.street"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Eckenhagenerstrasse 34"
           required
@@ -47,7 +47,7 @@
         <label class="block mb-2 text-sm">Postleitzahl</label>
         <input
           type="number"
-          v-model="shipping.postcode"
+          v-model="address.postcode"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="51702"
           required
@@ -57,7 +57,7 @@
         <label class="block mb-2 text-sm">Stadt</label>
         <input
           type="text"
-          v-model="shipping.city"
+          v-model="address.city"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Gummersbach"
           required
@@ -67,7 +67,7 @@
         <label class="block mb-2 text-sm">Land</label>
         <input
           type="text"
-          v-model="shipping.country"
+          v-model="address.country"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Deutschland"
           required
@@ -77,20 +77,12 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "ShippingAddress",
-  mounted() {
-    this.$store.commit("checkout-load-shipping-address");
-    this.form = this.$store.state.checkout.shipping;
-  },
-  computed: {
-    shipping: function () {
-      return this.$store.state.checkout.shipping;
-    },
-    shippingMethod: function () {
-      return this.$store.state.checkout.shippingMethod;
-    },
-  },
-};
+<script setup>
+import { storeToRefs } from "pinia";
+import { useCheckoutShippingStore } from "../../store/checkout/shipping";
+
+let store = useCheckoutShippingStore();
+store.reload();
+
+const { address } = storeToRefs(store);
 </script>

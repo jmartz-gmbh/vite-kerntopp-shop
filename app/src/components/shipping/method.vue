@@ -9,19 +9,14 @@
           <p>Einfach selber abholen</p>
           <fa
             icon="circle"
-            v-if="shippingMethod == 'clickAndCollect'"
+            v-if="shipping == 'clickAndCollect'"
             class="fa-2x"
           />
           <fa
             icon="circle-dot"
             v-else
             class="fa-2x"
-            @click="
-              $store.commit('checkout-change-shipping-method', {
-                that: this,
-                method: 'clickAndCollect',
-              })
-            "
+            @click="store.updateShipping('clickAndCollect')"
           />
         </div>
       </div>
@@ -31,17 +26,12 @@
         <div class="card">
           <fa :icon="['fab', 'dhl']" class="fa-3x" />
           <p>Bequem per Lieferservice</p>
-          <fa icon="circle" v-if="shippingMethod == 'dhl'" class="fa-2x" />
+          <fa icon="circle" v-if="shipping == 'dhl'" class="fa-2x" />
           <fa
             icon="circle-dot"
             v-else
             class="fa-2x"
-            @click="
-              $store.commit('checkout-change-shipping-method', {
-                that: this,
-                method: 'dhl',
-              })
-            "
+            @click="store.updateShipping('dhl')"
           />
         </div>
       </div>
@@ -53,19 +43,14 @@
           <p>Bequem per Lieferservice</p>
           <fa
             icon="circle"
-            v-if="shippingMethod == 'dhlExpress'"
+            v-if="shipping == 'dhlExpress'"
             class="fa-2x"
           />
           <fa
             icon="circle-dot"
             v-else
             class="fa-2x"
-            @click="
-              $store.commit('checkout-change-shipping-method', {
-                that: this,
-                method: 'dhlExpress',
-              })
-            "
+            @click="store.updateShipping('dhlExpress')"
           />
         </div>
       </div>
@@ -73,23 +58,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "ShippingMethod",
-  computed: {
-    shippingMethod: function () {
-      if (this.$store.state.checkout.shippingMethod == null) {
-        this.$store.commit("checkout-change-shipping-method", {
-          that: this,
-          method: "clickAndCollect",
-        });
-        return "clickAndCollect";
-      }
-      return this.$store.state.checkout.shippingMethod;
-    },
-  },
-  mounted() {
-    this.$store.commit("checkout-load-shipping-method");
-  },
-};
+<script setup>
+import { useCheckoutMethodsStore } from "@/store/checkout/methods";
+import { storeToRefs } from "pinia";
+
+let store = useCheckoutMethodsStore();
+store.reload();
+const { shipping } = storeToRefs(store);
 </script>

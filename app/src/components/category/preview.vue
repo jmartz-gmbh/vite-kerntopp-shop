@@ -11,39 +11,40 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted, reactive, ref } from "vue";
 import ProductCard from "../product/card.vue";
 
-export default {
-  name: "CategoryPreview",
-  components: {
-    "product-card": ProductCard,
+let props = defineProps({
+  limit: {
+    required: true,
+    Typ: Number,
   },
-  data() {
-    return {
-      products: {},
-    };
+  identifier: {
+    required: true,
+    Typ: Number,
   },
-  mounted() {
-    this.load();
-  },
-  methods: {
-    load: function () {
-      const that = this;
-      fetch("https://catalog.kerntopp.shop/api/products?populate=categories")
-        .then((response) => {
-          return response.json();
-        })
-        .then((json) => {
-          that.products = json.data.reverse().splice(-1 * that.limit);
-        });
-    },
-  },
-  props: {
-    limit: {
-      required: true,
-      Typ: Number,
-    },
-  },
+});
+
+let products = ref([]);
+
+let load = function () {
+  fetch(
+    "https://catalog.kerntopp.shop/api/categories/" +
+      props.identifier +
+      "?populate=products"
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      if (json.data) {
+        products.value = json.data.attributes.products.data.reverse().splice(-3);
+      }
+    });
 };
+
+onMounted(function () {
+  load();
+});
 </script>

@@ -1,55 +1,41 @@
-export default {
-  state: () => ({
-    items: [],
-    qty: 0,
-  }),
-  mutations: {
-    "cart-items-load": function (state) {
-      state.items = JSON.parse(localStorage.getItem("cart"));
-      if (state.items == null) {
-        state.items = [];
+import { defineStore } from "pinia";
+
+export const useCartStore = defineStore("cart", {
+  state() {
+    return {
+      items: [],
+    };
+  },
+  actions: {
+    add: function (data) {
+      let found = false;
+
+      for (let i = 0; i < this.items.length; i++) {
+        if (this.items[i].id == data.id) {
+          found = true;
+          this.items[i].qty += data.qty;
+        }
       }
 
-      for (let i = 0; i < state.items.length; i++) {
-        state.qty += state.items[i].qty;
-      }
-    },
-    "cart-destroy": function (state, { that }) {
-      state.items = [];
-      state.qty = 0;
-      that.$store.commit("cart-items-save");
-    },
-    "cart-items-save": function (state) {
-      localStorage.setItem(
-        "cart",
-        JSON.stringify(state.items) == null ? [] : JSON.stringify(state.items)
-      );
-    },
-    "cart-item-remove": function (state, data) {
-      for (let i = 0; i < state.items.length; i++) {
-        if (state.items[i].id == data.id) {
-          state.qty -= state.items[i].qty;
-          state.items.splice(i, 1);
-          data.that.$store.commit("cart-items-save");
-        }
-      }
-    },
-    "product-add-to-cart": function (state, data) {
-      let found = false;
-      for (let i = 0; i < state.items.length; i++) {
-        if (state.items[i].id == data.id) {
-          state.items[i].qty += data.qty;
-          found = true;
-        }
-      }
       if (!found) {
-        state.items.push({
-          id: data.id,
-          qty: data.qty,
-        });
+        this.items.push(data);
       }
-      state.qty += data.qty;
-      data.that.$store.commit("cart-items-save");
+
+      this.save();
+    },
+    save: function () {
+      localStorage.setItem("cart", JSON.stringify(this.items));
+    },
+    reload: function () {
+      this.items = JSON.parse(localStorage.getItem("cart"));
+      if (this.items == null) {
+        this.$reset();
+      }
+      this.save();
+    },
+    destroy: function () {
+      this.items = [];
+      this.save();
     },
   },
-};
+});

@@ -1,6 +1,6 @@
 <template>
   <section
-    v-if="$store.state.nav.toggle"
+    v-if="nav.open"
     id="nav-content"
     class="block py-2 px-2"
   >
@@ -37,6 +37,8 @@
   </section>
 </template>
 
-<script>
-export default {};
+<script setup>
+import { useNavStore } from '../../store/nav';
+
+let nav = useNavStore();
 </script>

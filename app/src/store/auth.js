@@ -1,25 +1,25 @@
-export default {
-  state: () => ({
-    token: "",
-  }),
-  mutations: {
-    "user-add-token": function (state, { that, token }) {
-      state.token = token;
-      that.$store.commit("auth-token-save");
-    },
-    "user-logout": function (state, { that }) {
-      state.token = "";
-      that.$store.commit("auth-token-save");
-      that.$store.commit("cart-destroy", {
-        that: that,
-      });
-      that.$router.push('/');
-    },
-    "auth-token-save": function (state) {
-      localStorage.setItem("token", state.token);
-    },
-    "auth-token-load": function (state) {
-      state.token = localStorage.getItem("token");
-    },
+import { defineStore } from "pinia";
+
+export const useAuthStore = defineStore("auth", {
+  state() {
+    return {
+      token: "",
+    };
   },
-};
+  actions: {
+    update: function (token) {
+      this.token = token;
+      this.save();
+    },
+    save: function(){
+      localStorage.setItem('token', this.token);
+    },
+    refresh: function(){
+      this.token = localStorage.getItem('token');
+    },
+    logout: function(){
+      this.token = '';
+      this.save();
+    }
+  },
+});

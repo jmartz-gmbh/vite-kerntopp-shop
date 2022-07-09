@@ -1,27 +1,26 @@
-export default {
-  "checkout-update-billing-address": function (state, { that, address }) {
-    state.shipping = address;
-    that.$store.commit("checkout-save-billing-address");
-  },
-  "checkout-load-billing-address": function (state) {
-    state.billing = JSON.parse(localStorage.getItem("billing"));
+import { defineStore } from "pinia";
 
-    if (state.billing == null) {
-      state.billing = {
-        surename: "woman",
-        firstname: "f",
+export const useCheckoutBillingStore = defineStore("billing", {
+  state() {
+    return {
+      address: {
+        surename: "",
+        firstname: "",
         lastname: "",
         street: "",
         postcode: "",
-        country: "",
         city: "",
-      };
-    }
+        country: "",
+      },
+      shippingAndBillingSame: true,
+    };
   },
-  "checkout-save-billing-address": function (state) {
-    localStorage.setItem("billing", JSON.stringify(state.billing));
+  actions: {
+    reload: function () {
+      this.address = JSON.parse(localStorage.getItem("billing"));
+      if (this.address == null) {
+        this.$reset();
+      }
+    },
   },
-  "checkout-remove-billing": function (state) {
-    localStorage.setItem("billing", JSON.stringify({}));
-  },
-};
+});

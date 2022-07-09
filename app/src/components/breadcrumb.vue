@@ -6,22 +6,24 @@
       <router-link
         :to="item.link"
         class="item mr-2"
-        v-for="(item, index) in this.$store.state.breadcrumb.items"
+        v-for="(item, index) in store.items"
         >{{ item.label }}</router-link
       >
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: "Breadcrumb",
-  methods: {},
-  watch: {
-    $route: function(){
-      this.$store.commit('breadcrumb-reset');
-    }
-  }
-};
+<script setup>
+import { useBreadcrumbStore } from "@/store/breadcrumb.js";
+import { watch } from "vue";
+import { useRoute } from "vue-router";
+
+let store = useBreadcrumbStore();
+let route = useRoute();
+
+watch(route, function (value) {
+  store.$reset();
+  store.add({ link: "/", label: "Home" });
+});
 </script>
 
 <style lang="less">

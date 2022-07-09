@@ -1,21 +1,17 @@
-const messages = {
-    state: () => ({
+import { defineStore } from "pinia";
+
+export const useMessagesStore = defineStore("messages", {
+  state() {
+    return {
       items: [],
-    }),
-    mutations: {
-      "messages-add": function (state, data) {
-        state.items.push({
-          status: data.status,
-          message: data.message,
-        });
-      },
-      "messages-reset": function (state) {
-        state.items = [];
-      },
-      "messages-remove": function (state, data) {
-        state.items.splice(data.index, 1);
-      },
+    };
+  },
+  actions: {
+    add: function (item) {
+      this.items.push(item);
     },
-  };
-  export default messages;
-  
+    close:function(index){
+      this.items.splice(index, -1);
+    }
+  },
+});

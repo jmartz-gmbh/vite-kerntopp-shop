@@ -14,41 +14,31 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "PickupStore",
-  data() {
-    return {
-      selected: 0,
-      stores: [
-        {
-          id: 0,
-          name: "Test Store",
-          street: "Eckenhagenerstrasse 34",
-          postcode: "51645",
-          city: "Gummersbach",
-        },
-        {
-          id: 1,
-          name: "Test Store",
-          street: "Eckenhagenerstrasse 35",
-          postcode: "51645",
-          city: "Gummersbach",
-        },
-      ],
-    };
+<script setup>
+import { ref, reactive, watch } from "vue";
+import { useCheckoutPickupStore } from "@/store/checkout/pickup.js";
+
+let store = useCheckoutPickupStore();
+
+let selected = ref(0);
+let stores = reactive([
+  {
+    id: 0,
+    name: "Test Store",
+    street: "Eckenhagenerstrasse 34",
+    postcode: "51645",
+    city: "Gummersbach",
   },
-  mounted() {
-    this.$store.commit("checkout-load-pickup-store");
-    this.selected = this.$store.state.checkout.pickup_store;
+  {
+    id: 1,
+    name: "Test Store",
+    street: "Eckenhagenerstrasse 35",
+    postcode: "51702",
+    city: "Bergneustadt",
   },
-  watch: {
-    selected: function (value) {
-      this.$store.commit("checkout-update-pickup-store", {
-        that: this,
-        info: value,
-      });
-    },
-  },
-};
+]);
+
+watch(selected, function (value) {
+  store.update(selected);
+});
 </script>

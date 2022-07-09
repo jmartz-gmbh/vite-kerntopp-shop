@@ -1,19 +1,14 @@
-export default {
-  state: () => ({
-      toggle: false
-  }),
-  mutations: {
-    "nav-toggle": function(state){
-      state.toggle = !state.toggle;
-    },
-    "nav-reset": function(state){
-      state.toggle = false;
-    },
-    "nav-open": function(state){
-      state.toggle = true;
-    },
-    "nav-close": function(state){
-      state.toggle = false;
+import { defineStore } from "pinia";
+
+export const useNavStore = defineStore("nav", {
+  state() {
+    return {
+        open: false
+    };
+  },
+  actions: {
+    toggle: function(){
+        this.open = !this.open;
     }
   },
-};
+});

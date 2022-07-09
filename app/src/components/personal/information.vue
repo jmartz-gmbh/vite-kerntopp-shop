@@ -40,30 +40,20 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "PersonalInformation",
-  data() {
-    return {};
-  },
-  mounted() {
-    this.$store.commit("checkout-load-personal-info");
-  },
-  computed: {
-    form: function () {
-      return this.$store.state.checkout.personal_info;
-    },
-  },
-  watch: {
-    form: {
-      handler(value) {
-        this.$store.commit("checkout-update-personal-info", {
-          that: this,
-          info: value,
-        });
-      },
-      deep: true,
-    },
-  },
-};
+<script setup>
+import { reactive, watch } from "vue";
+import { useCheckoutPersonalInfoStore } from "@/store/checkout/personal_info.js";
+
+let store = useCheckoutPersonalInfoStore();
+
+let form = reactive({
+  surename: "",
+  firstname: "",
+  lastname: "",
+  phone: "",
+});
+
+watch(form, function (value) {
+  store.update(value);
+});
 </script>

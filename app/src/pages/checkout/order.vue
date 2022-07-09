@@ -1,18 +1,14 @@
 <template>
   <div class="vp-checkout-order">
     <h2 class="font-bold text-xl mb-2">Order</h2>
-    <p>{{ shipping }}</p>
-    <p>{{ shippingMethod }}</p>
-    <div v-if="shippingMethod == 'clickAndCollect'">
-      <p>{{ pickup_store }}</p>
-      <p>{{ personal_info }}</p>
-    </div>
-    <div v-else-if="shippingMethod == 'dhl' || shippingMethod == 'dhlExpress'">
-      <p>{{ shippingAndBillingSame }}</p>
-      <p>{{ billing }}</p>
-    </div>
-    <p>{{ paymentMethod }}</p>
-    <p>{{ cart }}</p>
+    {{ shippingStore.address }} <br />
+    {{ billingStore.address }} <br />
+    {{ methodsStore.$state }} <br />
+    {{ pickupStore.$state }} <br />
+    {{ personalInfoStore.info }} <br />
+    {{ cartStore.items }} <br />
+    {{ billingStore.shippingAndBillingSame }}
+
     <div class="buttons flex justify-between">
       <button>back</button>
       <button @click="saveOrder()">save Order</button>
@@ -20,86 +16,67 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "CheckoutOrder",
-  mounted() {
-    this.$store.commit("checkout-load-shipping-address");
-    this.$store.commit("checkout-load-billing-address");
-    this.$store.commit("checkout-load-payment-method");
-    this.$store.commit("checkout-load-shipping-method");
-    this.$store.commit("checkout-load-personal-info");
-    this.$store.commit("checkout-load-pickup-store");
-  },
-  methods: {
-    isValid: function () {
-      if (this.paymentMethod == "vorkasse") {
-        return true;
-      } else if (this.paymentMethod == "paypal") {
-        return true;
+<script setup>
+import { useCheckoutShippingStore } from "../../store/checkout/shipping";
+import { useCheckoutBillingStore } from "../../store/checkout/billing";
+import { useCheckoutMethodsStore } from "../../store/checkout/methods";
+import { onMounted } from "vue";
+import { useCheckoutPickupStore } from "../../store/checkout/pickup";
+import { useCheckoutPersonalInfoStore } from "../../store/checkout/personal_info";
+import { useCartStore } from "@/store/cart.js";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../../store/auth";
+import { useMessagesStore } from "../../store/messages";
+
+let methodsStore = useCheckoutMethodsStore();
+let shippingStore = useCheckoutShippingStore();
+let billingStore = useCheckoutBillingStore();
+let pickupStore = useCheckoutPickupStore();
+let personalInfoStore = useCheckoutPersonalInfoStore();
+let cartStore = useCartStore();
+let router = useRouter();
+let authStore = useAuthStore();
+let messageStore = useMessagesStore();
+
+let saveOrder = function () {
+  fetch("https://auth.kerntopp.shop/api/order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      cart: cartStore.items,
+      billing: billingStore.address,
+      shipping: shippingStore.address,
+      paymentMethod: methodsStore.payment,
+      shippingMethod: methodsStore.shipping,
+      personal_info: personalInfoStore.info,
+      shippingAndBillingSame: billingStore.shippingAndBillingSame,
+      pickup_store: pickupStore.store,
+      token: authStore.token,
+    }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      if (json.id) {
+        messageStore.add({
+          status: "info",
+          message: "Bestellung erfolgreich platziert",
+        });
+        router.push('/');
+        cartStore.destroy();
       }
-      return false;
-    },
-    saveOrder: function () {
-      const that = this;
-      this.valid = this.isValid();
-      console.log(this.valid);
-      if (this.valid) {
-        fetch("https://auth.kerntopp.shop/api/order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token: this.$store.state.auth.token,
-            shipping: this.shipping,
-            shippingMethod: this.shippingMethod,
-            shippingAndBillingSame: this.shippingAndBillingSame,
-            billing: this.billing,
-            pickup_store: this.pickup_store,
-            personal_info: this.personal_info,
-            paymentMethod: this.paymentMethod,
-            cart: this.cart,
-          }),
-        })
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (json) {
-            console.log(json);
-            if (json.id) {
-              that.$router.push("/checkout/thanks/");
-              that.$store.commit("cart-destroy", { that: that });
-            }
-          });
-      }
-    },
-  },
-  computed: {
-    shipping: function () {
-      return this.$store.state.checkout.shipping;
-    },
-    shippingMethod: function () {
-      return this.$store.state.checkout.shippingMethod;
-    },
-    billing: function () {
-      return this.$store.state.checkout.billing;
-    },
-    pickup_store: function () {
-      return this.$store.state.checkout.pickup_store;
-    },
-    personal_info: function () {
-      return this.$store.state.checkout.personal_info;
-    },
-    paymentMethod: function () {
-      return this.$store.state.checkout.paymentMethod;
-    },
-    cart: function () {
-      return this.$store.state.cart.items;
-    },
-    shippingAndBillingSame: function () {
-      return this.$store.state.checkout.shippingAndBillingSame;
-    },
-  },
+    });
 };
+
+onMounted(function () {
+  methodsStore.reload();
+  billingStore.reload();
+  shippingStore.reload();
+  pickupStore.reload();
+  personalInfoStore.reload();
+  cartStore.reload();
+});
 </script>
