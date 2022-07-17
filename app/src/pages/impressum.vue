@@ -117,3 +117,13 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import { useBreadcrumbStore } from "@/store/breadcrumb";
+
+let store = useBreadcrumbStore();
+store.add({
+  label: "Impressum",
+  link: "/impressum",
+});
+</script>

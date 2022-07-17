@@ -67,6 +67,11 @@ let saveOrder = function () {
         });
         router.push('/');
         cartStore.destroy();
+        billingStore.$reset();
+        shippingStore.$reset();
+        methodsStore.$reset();
+        personalInfoStore.$reset();
+        pickupStore.$reset();
       }
     });
 };

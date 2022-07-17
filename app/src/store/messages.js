@@ -10,8 +10,8 @@ export const useMessagesStore = defineStore("messages", {
     add: function (item) {
       this.items.push(item);
     },
-    close:function(index){
-      this.items.splice(index, -1);
-    }
+    close: function (index) {
+      this.items.splice(index, 1);
+    },
   },
 });

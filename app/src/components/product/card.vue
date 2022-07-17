@@ -26,6 +26,7 @@
 import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 import { useCartStore } from "../../store/cart";
+import { useMessagesStore } from "@/store/messages";
 
 let props = defineProps({
   identifier: {
@@ -36,6 +37,7 @@ let props = defineProps({
 
 let store = useCartStore();
 const { items } = storeToRefs(store);
+let messageStore = useMessagesStore();
 
 let product = ref({});
 
@@ -43,6 +45,10 @@ let addToCart = function (id, qty) {
   store.add({
     id: id,
     qty: qty,
+  });
+  messageStore.add({
+    stauts: "info",
+    message: "Produkt erfolgreich zum Warenkorb hinzugefügt.",
   });
 };
 
@@ -57,6 +63,10 @@ let load = function (id, qty) {
     })
     .then((json) => {
       product.value = json.data;
+      localStorage.setItem(
+        "product-" + props.identifier,
+        JSON.stringify(json.data)
+      );
     });
 };
 

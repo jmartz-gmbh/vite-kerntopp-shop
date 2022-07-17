@@ -35,19 +35,21 @@
 </template>
 
 <script setup>
-import { useCartStore } from "@/store/cart.js";
+import { useCartStore } from "@/store/cart";
 import { storeToRefs } from "pinia";
 import { computed, onMounted } from "vue";
+import { useBreadcrumbStore } from "@/store/breadcrumb";
 
+let breadcrumbStore = useBreadcrumbStore();
 let store = useCartStore();
 const { items } = storeToRefs(store);
+let total = computed(function(){
+  return 10;
+});
 
-let total = computed(function () {
-  let tmp = 0;
-  for (let i = 0; i < items.length; i++) {
-    tmp += 10 * items[i].qty;
-  }
-  return tmp;
+breadcrumbStore.add({
+  label: "Warenkorb",
+  link: "/cart",
 });
 
 let remove = function (id) {

@@ -12,7 +12,7 @@
         <fa icon="info" class="mr-3" />
         {{ item.message }}
       </p>
-      <fa icon="times" @click="store.close(index)" class="ml-3" />
+      <fa icon="times" @click="store.close(index)" class="ml-3 fa-2x" />
     </div>
   </div>
 </template>

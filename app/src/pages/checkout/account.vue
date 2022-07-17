@@ -73,16 +73,16 @@ let register = function () {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      email: that.form.register.email,
-      password: that.form.register.password,
-      username: that.form.register.username,
+      email: form.register.email,
+      password: form.register.password,
+      username: form.register.username,
     }),
   })
     .then((response) => {
       return response.json();
     })
     .then((json) => {
-      that.$router.go();
+      router.go();
     });
 };
 let login = function () {
